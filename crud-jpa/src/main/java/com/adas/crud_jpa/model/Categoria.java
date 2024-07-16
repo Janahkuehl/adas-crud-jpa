@@ -8,13 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-// Define automaticamente o construtor vazio da classe
+// Define automaticamente o construtor vazio
 @NoArgsConstructor
 
-// Define automaticamente o construtor (cheio) com todos os atributos da classe
+// Define automaticamente o construtor com TODOS os atributos
 @AllArgsConstructor
 
-// Define automaticamente os médotos GET e SET para todos os atributos
+// Define automaticamente os métoso GET e SET para todos os atributos
 // Ou pode substituir pela anotação @Data
 @Getter @Setter
 
@@ -36,7 +36,3 @@ public class Categoria {
     private boolean status;
 
 }
-
-
-
-
