@@ -1,13 +1,12 @@
 package com.adas.crud_jpa.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Builder @Data
@@ -20,5 +19,17 @@ public class Produto {
     private String nome;
     private Double preco;
     private Integer quantidade;
+
+
+    // Vinculando vários registros da tabela Produto com um unico registro
+    // da tabela categoria
+    // A tabela Produto recebe a chave primaria de Categoria como chave estrangeira
+    // dentro do campo "categoria_id"
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    @ManyToMany(mappedBy = "produtosCaixa")
+    private List<Caixa> caixas;
 
 }
