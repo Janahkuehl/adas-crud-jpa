@@ -1,6 +1,7 @@
 package com.adas.crud_jpa.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +37,7 @@ public class Categoria {
 
 
     // Vinculando um unico registro da tabela Categoria com varios registros da tabela Prduto
+    @JsonIgnore
     @OneToMany(mappedBy = "categoria")
     private List<Produto> produtos;
 

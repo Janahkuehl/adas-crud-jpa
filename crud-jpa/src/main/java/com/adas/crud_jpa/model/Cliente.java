@@ -18,7 +18,7 @@ public class Cliente {
 
     private Integer id;
     private String nome;
-    private String idade;
-    private Integer cpf;
+    private int idade;
+    private String cpf;
 
 }
