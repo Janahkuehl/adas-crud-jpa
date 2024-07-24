@@ -34,6 +34,21 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoEncontrada);
     }
 
+    @GetMapping("/nome/exato/{nome}")
+    public ResponseEntity<List<Produto>> buscarPorNomeExato(@PathVariable String nome) {
+        return ResponseEntity.ok(produtoService.buscarPorNomeExato(nome));
+    }
+
+    @GetMapping("/nome/similar/{nome}")
+    public ResponseEntity<List<Produto>> buscarPorNomeSimilar(@PathVariable String nome) {
+        return ResponseEntity.ok(produtoService.buscarPorNomeSimilar(nome));
+    }
+
+    @GetMapping("/preco/{valor}")
+    public ResponseEntity<List<Produto>> buscarPorPrecoMaiorQue(@PathVariable Double valor) {
+        return ResponseEntity.ok(produtoService.buscarPorPrecoMaiorQue(valor));
+    }
+
     @PostMapping
     public ResponseEntity<Produto> add(@RequestBody Produto novaProduto) {
         return ResponseEntity.ok(produtoService.save(novaProduto));
