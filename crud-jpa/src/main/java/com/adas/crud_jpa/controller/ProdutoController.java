@@ -1,8 +1,10 @@
 package com.adas.crud_jpa.controller;
 
 import com.adas.crud_jpa.model.Caixa;
+import com.adas.crud_jpa.model.Categoria;
 import com.adas.crud_jpa.model.Produto;
 import com.adas.crud_jpa.service.CaixaService;
+import com.adas.crud_jpa.service.CategoriaService;
 import com.adas.crud_jpa.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,10 @@ public class ProdutoController {
 
     @Autowired
     private CaixaService caixaService;
-    
+
+    @Autowired
+    private CategoriaService categoriaService;
+
     @GetMapping
     public ResponseEntity<List<Produto>> findAll() {
         return ResponseEntity.ok(produtoService.findAll());
@@ -43,6 +48,26 @@ public class ProdutoController {
     public ResponseEntity<List<Produto>> buscarPorNomeSimilar(@PathVariable String nome) {
         return ResponseEntity.ok(produtoService.buscarPorNomeSimilar(nome));
     }
+
+    @GetMapping("/categoria/ativa/{codigo}")
+    public ResponseEntity<?> buscarPorCategoriaAtiva(@PathVariable Integer codigo) {
+        Categoria categoria = categoriaService.buscarPorId(codigo);
+
+        // Validando se a categoria existe no banco de dados
+        if (categoria == null) {
+            return ResponseEntity.status(500).body("Categoria não encontrada para o código: " + codigo);
+        }
+
+
+        // Validando se o status da categoria é false
+        if (!categoria.isStatus()) {
+            return ResponseEntity.status(500).body("Categoria " + categoria.getNome() + " está inativa!");
+        }
+
+        // Retornar a lista de produtos pela categoria ativa
+        return ResponseEntity.ok(produtoService.buscarPorCodigoCategoria(codigo));
+    }
+
 
     @GetMapping("/preco/{valor}")
     public ResponseEntity<List<Produto>> buscarPorPrecoMaiorQue(@PathVariable Double valor) {

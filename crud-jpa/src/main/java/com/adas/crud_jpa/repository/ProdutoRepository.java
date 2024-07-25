@@ -24,4 +24,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("SELECT p FROM Produto p WHERE p.categoria.id = :CATEGORIA_ID")
     List<Produto> buscarPorCodigoCategoria(@Param("CATEGORIA_ID") Integer idCategoria);
 
+
+
 }
