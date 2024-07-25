@@ -49,6 +49,11 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorPrecoMaiorQue(valor));
     }
 
+    @GetMapping("/categoria/{codigo}")
+    public ResponseEntity<List<Produto>> buscarPorCodigoCategoria(@PathVariable Integer codigo) {
+        return ResponseEntity.ok(produtoService.buscarPorCodigoCategoria(codigo));
+    }
+
     @PostMapping
     public ResponseEntity<Produto> add(@RequestBody Produto novaProduto) {
         return ResponseEntity.ok(produtoService.save(novaProduto));

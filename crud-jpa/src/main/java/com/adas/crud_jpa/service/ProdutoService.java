@@ -30,7 +30,7 @@ public class ProdutoService {
     }
 
     public List<Produto> buscarPorNomeExato(String nomeExato) {
-        return produtoRepository.buscarPeloNomeExato(nomeExato);
+        return produtoRepository.buscarPorNomeExato(nomeExato);
     }
 
     public List<Produto> buscarPorNomeSimilar(String nomeSimilar) {
@@ -39,6 +39,10 @@ public class ProdutoService {
 
     public List<Produto> buscarPorPrecoMaiorQue(Double preco) {
         return produtoRepository.buscarPorPrecoMaiorQue(preco);
+    }
+
+    public List<Produto> buscarPorCodigoCategoria(Integer idCategoria) {
+        return produtoRepository.buscarPorCodigoCategoria(idCategoria);
     }
 
 }

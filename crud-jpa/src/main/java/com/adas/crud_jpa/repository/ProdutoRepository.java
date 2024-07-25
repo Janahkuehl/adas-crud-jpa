@@ -9,13 +9,19 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
-    @Query("SELECT p FROM Produto p WHERE p.nome = :NOME")
-    List<Produto> buscarPeloNomeExato(@Param("NOME") String nome);
 
-    @Query("SELECT p FROM Produto p WHERE p.nome LIKE %:NOME%")
+    // Exemplos de SELECT baseado em JPQL
+    @Query("SELECT p FROM Produto p WHERE p.nome = :NOME")
+    List<Produto> buscarPorNomeExato(@Param("NOME") String nome);
+
+    @Query("SELECT p FROM Produto p WHERE p.nome ILIKE %:NOME%")
     List<Produto> buscarPorNomeSimilar(@Param("NOME") String nome);
 
-    @Query("SELECT p FROM Produto p WHERE p.preco >= :PRECO")
+    // Exemplo de SELECT nativo, utilizando a propriedade 'nativeQuerry = true'
+    @Query(value = "SELECT * FROM Produto p WHERE p.preco >= :PRECO", nativeQuery = true)
     List<Produto> buscarPorPrecoMaiorQue(@Param("PRECO") Double preco);
+
+    @Query("SELECT p FROM Produto p WHERE p.categoria.id = :CATEGORIA_ID")
+    List<Produto> buscarPorCodigoCategoria(@Param("CATEGORIA_ID") Integer idCategoria);
 
 }
