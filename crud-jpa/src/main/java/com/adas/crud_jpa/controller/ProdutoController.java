@@ -2,14 +2,18 @@ package com.adas.crud_jpa.controller;
 
 import com.adas.crud_jpa.model.Caixa;
 import com.adas.crud_jpa.model.Categoria;
+import com.adas.crud_jpa.model.Historico;
 import com.adas.crud_jpa.model.Produto;
 import com.adas.crud_jpa.service.CaixaService;
 import com.adas.crud_jpa.service.CategoriaService;
+import com.adas.crud_jpa.service.HistoricoService;
 import com.adas.crud_jpa.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,6 +28,9 @@ public class ProdutoController {
 
     @Autowired
     private CategoriaService categoriaService;
+
+    @Autowired
+    private HistoricoService historicoService;
 
     @GetMapping
     public ResponseEntity<List<Produto>> findAll() {
@@ -93,10 +100,11 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.save(produtoEditada));
     }
 
-    @PutMapping("/vender/{quantidade}/{idCaixa}")
+    @PutMapping("/vender/{quantidade}/{idCaixa}/{idCliente}")
     public ResponseEntity<String> vender(@RequestBody Produto produto,
             @PathVariable int quantidade,
-            @PathVariable int idCaixa) {
+            @PathVariable int idCaixa,
+            @PathVariable int idCliente) {
 
         // Verificar se o caixa está ativo
         Caixa caixa = caixaService.findById(idCaixa);
@@ -119,8 +127,16 @@ public class ProdutoController {
         // Descobrir o valor total da venda
         Double totalVenda = quantidade * produtoAtual.getPreco();
 
+        // Criando a lista de produtos para enviar ao histórico
+        List<Produto> produtos = new ArrayList<>();
+        produtos.add(produto);
+
         // Atualizar o saldo do caixa
         caixa = caixaService.realizarMovimentacao(idCaixa, totalVenda, "ENTRADA");
+
+        // Registrar movimentação no histórico
+        historicoService.registrarVenda(idCliente, produtos);
+
 
         // Concatenando os valores para montar um recibo da movimentação, tanto no produto quanto no caixa
         String recibo = " " +
@@ -130,6 +146,15 @@ public class ProdutoController {
                 "\nSaldo atual do caixa: R$ " + caixa.getSaldo();
 
         return ResponseEntity.ok(recibo);
+    }
+
+    @PutMapping("/vender/lista/{idCliente}")
+    public ResponseEntity<String> vender(@RequestBody List<Produto> produtos,
+                                         @PathVariable int idCliente) {
+
+        historicoService.registrarVenda(idCliente, produtos);
+
+        return ResponseEntity.ok("Venda registrada com sucesso");
     }
 
     @PutMapping("/comprar/{quantidade}/{idCaixa}")

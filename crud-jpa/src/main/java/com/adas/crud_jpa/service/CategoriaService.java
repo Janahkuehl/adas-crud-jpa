@@ -29,4 +29,8 @@ public class CategoriaService {
         categoriaRepository.delete(categoria);
     }
 
+    public List<Categoria> findByNome(int id) {
+        return categoriaRepository.findByIdGreaterThanEqual(id);
+    }
+
 }
